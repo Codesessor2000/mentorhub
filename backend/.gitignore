@@ -9,4 +9,4 @@ package-lock.json
 
 # Ignore Prisma migration artifacts
 prisma/migrations/*/migration.sql
-prisma/migrations/*/migration_lock.toml
+prisma/migrations/migration_lock.toml
