@@ -3,57 +3,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // or "mysql" or "sqlite" depending on your setup
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String
   role      Role
-  sessionsAsMentor  Session[] @relation("MentorSessions")
-  sessionsAsMentee  Session[] @relation("MenteeSessions")
-  feedbackGiven     Feedback[] @relation("FeedbackByMentee")
-  feedbackReceived  Feedback[] @relation("FeedbackForMentor")
-  createdAt DateTime @default(now())
+  bio       String?
+  avatarUrl String?
+  techStack String?
+
+  availabilitySlots AvailabilitySlot[] // New relation
 }
 
-model Session {
-  id         Int      @id @default(autoincrement())
-  mentor     User     @relation("MentorSessions", fields: [mentorId], references: [id])
-  mentorId   Int
-  mentee     User     @relation("MenteeSessions", fields: [menteeId], references: [id])
-  menteeId   Int
-  time       DateTime
-  status     SessionStatus
-  notes      String?
-  meetingUrl String?
-  feedback   Feedback?
-}
-
-model Feedback {
-  id         Int      @id @default(autoincrement())
-  session    Session  @relation(fields: [sessionId], references: [id])
-  sessionId  Int      @unique
-  byMentee   User     @relation("FeedbackByMentee", fields: [byMenteeId], references: [id])
-  byMenteeId Int
-  forMentor  User     @relation("FeedbackForMentor", fields: [forMentorId], references: [id])
-  forMentorId Int
-  rating     Int
-  comment    String
-  createdAt  DateTime @default(now())
+model AvailabilitySlot {
+  id       String   @id @default(uuid())
+  day      String   // e.g., "Monday"
+  startTime String  // "14:00"
+  endTime   String  // "15:00"
+  mentor   User     @relation(fields: [mentorId], references: [id])
+  mentorId String
 }
 
 enum Role {
-  MENTOR
-  MENTEE
-}
-
-enum SessionStatus {
-  PENDING
-  APPROVED
-  DECLINED
-  COMPLETED
+  mentor
+  mentee
 }

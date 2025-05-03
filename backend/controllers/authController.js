@@ -13,18 +13,17 @@ export const register = async (req, res) => {
     const user = await registerUser(req.body);
     res.status(201).json({ message: 'User registered', user });
   } catch (err) {
+    console.log(err);
     res.status(400).json({ error: err.message });
   }
 };
 
 export const login = async (req, res) => {
   try {
-    if (!email || !password) {
-      throw new Error('Email and password are required');
-    }
     const { token, user } = await loginUser(req.body);
     res.json({ message: 'Login successful', token, user });
   } catch (err) {
+    console.log(err);
     res.status(400).json({ error: err.message });
   }
 };
