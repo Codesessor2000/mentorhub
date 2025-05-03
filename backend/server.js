@@ -4,8 +4,9 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import profileRoutes from "./routes/profileRoutes.js";
 import availabilityRoutes from "./routes/availabilityRoutes.js";
-
-
+import sessionRoutes from './routes/sessionRoutes.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js'; 
 dotenv.config();
 const app = express();
 
@@ -17,6 +18,9 @@ app.get('/', (req, res) => res.send('MentorHub API Running'));
 app.use('/api/auth', authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/availability", availabilityRoutes);
+app.use('/api/sessions', sessionRoutes);
+app.use('/api/feedback', feedbackRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

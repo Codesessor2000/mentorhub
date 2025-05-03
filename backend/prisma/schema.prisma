@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String  @id @default(uuid())
+  email     String  @unique
   password  String
   name      String
   role      Role
@@ -18,18 +18,76 @@ model User {
   techStack String?
 
   availabilitySlots AvailabilitySlot[] // New relation
+  menteeSessions    SessionRequest[]   @relation("MenteeSessions")
+  mentorSessions    SessionRequest[]   @relation("MentorSessions")
+  sessionsAsMentee  Session[]          @relation("MenteeSessions") // Relation for sessions as mentee
+  sessionsAsMentor  Session[]          @relation("MentorSessions") // Relation for sessions as mentor
 }
 
 model AvailabilitySlot {
-  id       String   @id @default(uuid())
-  day      String   // e.g., "Monday"
-  startTime String  // "14:00"
-  endTime   String  // "15:00"
-  mentor   User     @relation(fields: [mentorId], references: [id])
-  mentorId String
+  id        String @id @default(uuid())
+  day       String // e.g., "Monday"
+  startTime String // "14:00"
+  endTime   String // "15:00"
+  mentor    User   @relation(fields: [mentorId], references: [id])
+  mentorId  String
+}
+
+model SessionRequest {
+  id        String        @id @default(uuid())
+  mentee    User          @relation("MenteeSessions", fields: [menteeId], references: [id])
+  menteeId  String
+  mentor    User          @relation("MentorSessions", fields: [mentorId], references: [id])
+  mentorId  String
+  date      String
+  startTime String
+  endTime   String
+  notes     String?
+  status    SessionStatus @default(pending)
+  createdAt DateTime      @default(now())
+
+  session          Session? @relation("SessionRequestToSession", fields: [sessionRequestId], references: [id])
+  sessionRequestId String?  @unique // Ensure uniqueness for one-to-one relation
+}
+
+model Session {
+  id             String        @id @default(uuid())
+  mentee         User          @relation("MenteeSessions", fields: [menteeId], references: [id])
+  menteeId       String
+  mentor         User          @relation("MentorSessions", fields: [mentorId], references: [id])
+  mentorId       String
+  date           DateTime
+  startTime      String
+  endTime        String
+  notes          String?
+  status         SessionStatus @default(pending)
+  googleMeetLink String? // This will hold the mocked Google Meet link
+  createdAt      DateTime      @default(now())
+
+  feedbacks Feedback[]
+
+  sessionRequest   SessionRequest? @relation("SessionRequestToSession")
+  sessionRequestId String?         @unique
+}
+
+model Feedback {
+  id            String   @id @default(uuid())
+  sessionId     String   @unique
+  session       Session  @relation(fields: [sessionId], references: [id])
+  menteeRating  Int? // 1 to 5, required
+  menteeComment String? // optional
+  mentorRating  Int? // optional
+  mentorComment String? // optional
+  createdAt     DateTime @default(now())
 }
 
 enum Role {
   mentor
   mentee
+}
+
+enum SessionStatus {
+  pending
+  approved
+  declined
 }
