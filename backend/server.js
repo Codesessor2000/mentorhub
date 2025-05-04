@@ -35,11 +35,7 @@ app.use('/api/feedback', feedbackRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
 // Handle requests to other routes (frontend routes)
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return next(); // let API routes continue
-  }
-
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(
     path.join(__dirname, 'frontend', 'dist', 'frontend', 'index.html'),
   );
