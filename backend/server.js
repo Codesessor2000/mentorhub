@@ -15,12 +15,14 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 const app = express();
 
-app.use(
-  cors({
-    origin: 'http://localhost:4200', // Angular dev server
-    credentials: true, // only if you're using cookies/auth headers
-  }),
-);
+if (process.env.NODE_ENV !== 'production') {
+  app.use(
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true,
+    }),
+  );
+}
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'frontend', 'dist', 'frontend')));
