@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         this.authService.saveToken(res.token);
         this.authService.saveUser(res.user);
-        this.router.navigate(['/home']);  // Navigate to the dashboard (or home)
+        this.router.navigate(['/main/home']);  // Navigate to the dashboard (or home)
       },
       error: (err) => {
         console.error('Login error:', err);

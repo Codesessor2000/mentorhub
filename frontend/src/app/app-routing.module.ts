@@ -8,20 +8,20 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ScheduleSessionComponent } from './session/schedule-session/schedule-session.component';
 const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },  // Default route
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
-    path: '',
+    path: 'main',
     component: MainLayoutComponent,
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'schedule', component: ScheduleSessionComponent }
-      // Add more routes here
     ]
   },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }  // Default route (redirect to login)
+  { path: '**', redirectTo: '/login' }  // Wildcard fallback
 ];
 
 @NgModule({
