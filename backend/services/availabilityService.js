@@ -21,11 +21,26 @@ export const getAvailability = async (mentorId) => {
   return availability;
 };
 
+export const getMentors = async () => {
+  const mentors = await prisma.user.findMany({
+    where: { role: 'mentor' },
+    include: {
+      availabilitySlots: true, // include their available slots
+    },
+  });
+  return mentors;
+};
+
 // Update an availability slot
-export const updateAvailability = async (availabilityId, startTime, endTime) => {
+export const updateAvailability = async (
+  availabilityId,
+  startTime,
+  endTime,
+) => {
   const updatedAvailability = await prisma.availabilitySlot.update({
     where: { id: availabilityId },
     data: {
+      day,
       startTime,
       endTime,
     },

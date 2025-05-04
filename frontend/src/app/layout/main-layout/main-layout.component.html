@@ -1,0 +1,30 @@
+<div class="main-layout">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h1 class="app-title">MentorHub</h1>
+    </header>
+  
+    <div class="wrapper">
+      <!-- Side Menu -->
+      <nav id="sidebar" class="bg-light">
+        <div class="sidebar-header">
+          <h3>MentorHub</h3>
+        </div>
+        <ul class="list-unstyled components">
+          <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
+          <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+          <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
+          <li><a routerLink="/schedule" routerLinkActive="active">Schedule Session</a></li>
+          <li><a (click)="logout()">Logout</a></li>
+        </ul>
+      </nav>
+  
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-area">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+  

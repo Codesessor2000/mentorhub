@@ -1,0 +1,148 @@
+<!-- <form (ngSubmit)="submitAvailability()" #availabilityForm="ngForm" class="p-3 border rounded">
+    <div class="form-group mb-3">
+      <label for="day">Day</label>
+      <select id="day" class="form-control" [(ngModel)]="availability.day" name="day" required>
+        <option *ngFor="let d of days" [value]="d">{{ d }}</option>
+      </select>
+    </div>
+  
+    <div class="form-group mb-3">
+      <label for="startTime">Start Time</label>
+      <input type="time" id="startTime" class="form-control" [(ngModel)]="availability.startTime" name="startTime" required>
+    </div>
+  
+    <div class="form-group mb-3">
+      <label for="endTime">End Time</label>
+      <input type="time" id="endTime" class="form-control" [(ngModel)]="availability.endTime" name="endTime" required>
+    </div>
+  
+    <button type="submit" class="btn btn-primary" [disabled]="!availabilityForm.form.valid">Submit</button>
+  </form>
+   -->
+
+   <div *ngIf="role=='mentor'" class="p-3">
+    <form (ngSubmit)="addSlot()" #slotForm="ngForm" class="mb-4 border p-3 rounded">
+      <div class="form-row row mb-3">
+        <div class="col">
+          <label>Day</label>
+          <select class="form-control" required [(ngModel)]="availability.day" name="day">
+            <option *ngFor="let d of days" [value]="d">{{ d }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Start Time</label>
+          <input type="time" class="form-control" required [(ngModel)]="availability.startTime" name="startTime">
+        </div>
+        <div class="col">
+          <label>End Time</label>
+          <input type="time" class="form-control" required [(ngModel)]="availability.endTime" name="endTime">
+        </div>
+        <div class="col align-self-end">
+          <button class="btn btn-primary w-100" [disabled]="!slotForm.form.valid">Add Slot</button>
+        </div>
+      </div>
+    </form>
+  
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let slot of slots; let i = index">
+          <td>{{ slot.day }}</td>
+          <td>{{ slot.startTime }}</td>
+          <td>{{ slot.endTime }}</td>
+          <td>
+            <!-- <button class="btn btn-danger btn-sm" (click)="editSlot(i)">Edit</button> -->
+            <button class="btn btn-danger btn-sm" (click)="deleteSlot(i)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="role=='mentee'" class="p-3">
+    <form (ngSubmit)="requestSlot()" #slotForm="ngForm" class="mb-4 border p-3 rounded">
+      <div class="form-row row mb-3">
+        <div class="col">
+          <label>Mentor</label>
+          <select class="form-control" required [(ngModel)]="mentorObj.id" (ngModelChange)="onSelectMentor(mentorObj.id)" name="day">
+            <option *ngFor="let mentor of mentors" [value]="mentor.id">{{ mentor.name }}</option>
+          </select>
+        </div>
+        <div class="col">
+            <label>Slot</label>
+            <select class="form-control" required [(ngModel)]="menteeAvailability.id" (ngModelChange)="onSelectSlot(menteeAvailability.id)" name="day">
+              <option *ngFor="let s of availabilitySlots" [value]="s.id">{{ s.day }} : {{s.startTime}} - {{s.endTime}}</option>
+            </select>
+          </div>
+        <div class="col align-self-end">
+          <button class="btn btn-primary w-100" [disabled]="!slotForm.form.valid">Book Slot</button>
+        </div>
+      </div>
+    </form>
+  
+    
+  </div>
+
+  <div class="p-3">
+    <h3>Session Requests</h3>
+  
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sr of sessionRequests; let i = index">
+          <td>{{ sr.date }}</td>
+          <td>{{ sr.startTime }}</td>
+          <td>{{ sr.endTime }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="approveSlot(sr.id)">Approve</button>
+            <button class="btn btn-danger btn-sm" (click)="rejectSlot(sr.id)">Reject</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Upcoming Sessions</h3>
+  
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Mentor</th>
+          <th>Mentee</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Meeting</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sr of upcomingSessions; let i = index">
+          <td>{{ sr.date }}</td>
+          <td>{{ sr.mentor.name }}</td>
+          <td>{{ sr.mentee.name }}</td>
+          <td>{{ sr.startTime }}</td>
+          <td>{{ sr.endTime }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="joinMeeting(sr.googleMeetLink)">Join</button>
+          </td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="giveFeedback(sr.id)">Give Feedback</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

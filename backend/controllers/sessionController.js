@@ -5,7 +5,8 @@ import {
   createSessionFromRequest,
   getSessionById,
   updateSessionDetails,
-  getAllSessions,
+  getAllSessionsforMentor,
+  getAllSessionsforMentee,
 } from '../services/sessionService.js';
 
 export const requestSession = async (req, res) => {
@@ -58,48 +59,62 @@ export const getMySessionRequests = async (req, res) => {
     const sessions = await getMySessions(req.user.userId, req.user.role);
     res.json({ sessions });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: 'Failed to fetch sessions' });
   }
 };
 
 export const createSession = async (req, res) => {
-    try {
-      const { sessionRequestId } = req.body;
-      const session = await createSessionFromRequest(sessionRequestId);
-      res.status(201).json({ message: 'Session created', session });
-    } catch (err) {
-        console.log(err)
-      res.status(400).json({ error: err.message });
-    }
-  };
-  
-  export const getSession = async (req, res) => {
-    try {
-      const session = await getSessionById(req.params.sessionId);
-      if (!session) return res.status(404).json({ error: 'Session not found' });
-      res.json(session);
-    } catch (err) {
-        console.log(err);
-      res.status(500).json({ error: err.message });
-    }
-  };
-  
-  export const updateSession = async (req, res) => {
-    try {
-      const { recordingUrl, transcript, feedback } = req.body;
-      const session = await updateSessionDetails(req.params.id, { recordingUrl, transcript, feedback });
-      res.json({ message: 'Session updated', session });
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
-  };
-  
-  export const listSessions = async (_req, res) => {
-    try {
-      const sessions = await getAllSessions();
-      res.json({ sessions });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
+  try {
+    const { sessionRequestId } = req.body;
+    const session = await createSessionFromRequest(sessionRequestId);
+    res.status(201).json({ message: 'Session created', session });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const getSession = async (req, res) => {
+  try {
+    const session = await getSessionById(req.params.sessionId);
+    if (!session) return res.status(404).json({ error: 'Session not found' });
+    res.json(session);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const updateSession = async (req, res) => {
+  try {
+    const { recordingUrl, transcript, feedback } = req.body;
+    const session = await updateSessionDetails(req.params.id, {
+      recordingUrl,
+      transcript,
+      feedback,
+    });
+    res.json({ message: 'Session updated', session });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const listSessionsforMentor = async (req, res) => {
+  try {
+    console.log(req.user.userId);
+    const sessions = await getAllSessionsforMentor(req.user.userId);
+    res.json({ sessions });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const listSessionsforMentee = async (req, res) => {
+  try {
+    const sessions = await getAllSessionsforMentee(req.user.userId);
+    res.json({ sessions });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

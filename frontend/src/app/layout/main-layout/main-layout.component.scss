@@ -1,0 +1,36 @@
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  
+    .top-bar {
+      background-color: #343a40;
+      color: white;
+      padding: 10px 20px;
+    }
+  
+    .wrapper {
+      display: flex;
+      flex: 1;
+    }
+  
+    #sidebar {
+      width: 200px;
+      padding: 20px;
+      background-color: azure;
+    }
+  
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center; /* centers vertically */
+      padding: 20px;
+    }
+  
+    .content-area {
+      width: 100%;
+      max-width: 800px;
+    }
+  }
+  

@@ -1,0 +1,35 @@
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .form-control {
+    border-radius: 6px;
+    box-shadow: none;
+    border: 1px solid #ced4da;
+  }
+  
+  button.btn {
+    width: 100%;
+    margin-top: 20px;
+    font-weight: 600;
+    padding: 10px;
+  }
+  

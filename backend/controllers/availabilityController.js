@@ -24,12 +24,41 @@ export const getAll = async (req, res) => {
   }
 };
 
+export const getAllSlotsByMentorId = async (req, res) => {
+  try {
+    const { mentorId } = req.params; // Get mentor's userId from authenticated user
+    const availabilitySlots =
+      await availabilityService.getAvailability(mentorId);
+    res.status(200).json({ availabilitySlots });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 // Update an existing availability slot
 export const update = async (req, res) => {
   try {
-    const { availabilityId, startTime, endTime } = req.body;
-    const updatedAvailability = await availabilityService.updateAvailability(availabilityId, startTime, endTime);
-    res.status(200).json({ message: "Availability updated", updatedAvailability });
+    const { day, startTime, endTime } = req.body;
+    const { availabilityId } = req.params;
+    const updatedAvailability = await availabilityService.updateAvailability(
+      availabilityId,
+      day,
+      startTime,
+      endTime,
+    );
+    res
+      .status(200)
+      .json({ message: 'Availability updated', updatedAvailability });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const getAllMentors = async (req, res) => {
+  try {
+    console.log('mentors api');
+    const mentors = await availabilityService.getMentors();
+    res.status(200).json({ mentors });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -38,9 +67,12 @@ export const update = async (req, res) => {
 // Delete an availability slot
 export const deleteAvailability = async (req, res) => {
   try {
-    const { availabilityId } = req.body;
-    const deletedAvailability = await availabilityService.deleteAvailability(availabilityId);
-    res.status(200).json({ message: "Availability deleted", deletedAvailability });
+    const { availabilityId } = req.params;
+    const deletedAvailability =
+      await availabilityService.deleteAvailability(availabilityId);
+    res
+      .status(200)
+      .json({ message: 'Availability deleted', deletedAvailability });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

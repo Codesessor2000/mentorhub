@@ -10,7 +10,12 @@ import analyticsRoutes from './routes/analyticsRoutes.js';
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:4200', // Angular dev server
+    credentials: true, // only if you're using cookies/auth headers
+  }),
+);
 app.use(express.json());
 
 app.get('/', (req, res) => res.send('MentorHub API Running'));

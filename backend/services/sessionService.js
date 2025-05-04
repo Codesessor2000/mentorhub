@@ -22,6 +22,7 @@ export const createSessionRequest = async ({
 
 export const updateSessionRequestStatus = async (id, status, mentorId) => {
   const session = await prisma.sessionRequest.findUnique({ where: { id } });
+  console.log(session);
   if (!session || session.mentorId !== mentorId)
     throw new Error('Unauthorized or session not found');
 
@@ -62,15 +63,15 @@ export const createSessionFromRequest = async (sessionRequestId) => {
 
   return await prisma.session.create({
     data: {
-        sessionRequestId: request.id,
-        date: new Date(request.date),
-        startTime: request.startTime,
-        endTime: request.endTime,
-        mentorId: request.mentorId,
-        menteeId: request.menteeId,
-        notes: request.notes,
-        status: 'approved',
-        googleMeetLink
+      sessionRequestId: request.id,
+      date: new Date(request.date),
+      startTime: request.startTime,
+      endTime: request.endTime,
+      mentorId: request.mentorId,
+      menteeId: request.menteeId,
+      notes: request.notes,
+      status: 'approved',
+      googleMeetLink,
     },
   });
 };
@@ -99,10 +100,48 @@ export const updateSessionDetails = async (
   });
 };
 
-export const getAllSessions = async () => {
+export const getAllSessionsforMentor = async (mentorId) => {
   return await prisma.session.findMany({
+    where: {
+      mentorId: mentorId,
+    },
     include: {
       sessionRequest: true,
+      mentor: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      mentee: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+};
+export const getAllSessionsforMentee = async (menteeId) => {
+  return await prisma.session.findMany({
+    where: {
+      menteeId: menteeId,
+    },
+    include: {
+      sessionRequest: true,
+      mentor: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      mentee: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
     orderBy: { createdAt: 'desc' },
   });
