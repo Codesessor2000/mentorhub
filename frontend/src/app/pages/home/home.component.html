@@ -21,6 +21,7 @@
    -->
 
    <div *ngIf="role=='mentor'" class="p-3">
+    <h3>Slot Availability</h3>
     <form (ngSubmit)="addSlot()" #slotForm="ngForm" class="mb-4 border p-3 rounded">
       <div class="form-row row mb-3">
         <div class="col">
@@ -65,8 +66,10 @@
       </tbody>
     </table>
   </div>
-
+<br><br>
+<hr>
   <div *ngIf="role=='mentee'" class="p-3">
+    <h3>Request a Session</h3>
     <form (ngSubmit)="requestSlot()" #slotForm="ngForm" class="mb-4 border p-3 rounded">
       <div class="form-row row mb-3">
         <div class="col">
@@ -90,13 +93,13 @@
     
   </div>
 
-  <div class="p-3">
+  <div *ngIf="role=='mentor'" class="p-3">
     <h3>Session Requests</h3>
   
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>Day</th>
+          <th>Date</th>
           <th>Start Time</th>
           <th>End Time</th>
           <th>Action</th>
@@ -104,18 +107,21 @@
       </thead>
       <tbody>
         <tr *ngFor="let sr of sessionRequests; let i = index">
-          <td>{{ sr.date }}</td>
+          <td>{{ sr.date | date}}</td>
           <td>{{ sr.startTime }}</td>
           <td>{{ sr.endTime }}</td>
           <td>
-            <button class="btn btn-danger btn-sm" (click)="approveSlot(sr.id)">Approve</button>
-            <button class="btn btn-danger btn-sm" (click)="rejectSlot(sr.id)">Reject</button>
+            <button class="btn btn-primary btn-sm" (click)="approveSlot(sr.id)">Approve</button>
+            <button class="btn btn-danger btn-sm mx-2" (click)="rejectSlot(sr.id)">Reject</button>
           </td>
         </tr>
       </tbody>
     </table>
-
-    <h3>Upcoming Sessions</h3>
+  </div>
+  <br><br>
+  <hr>
+  <div class="p-3">
+    <h3>Sessions</h3>
   
     <table class="table table-bordered table-striped">
       <thead>
@@ -127,11 +133,12 @@
           <th>End Time</th>
           <th>Meeting</th>
           <th>Feedback</th>
+          <th>View Feedback</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let sr of upcomingSessions; let i = index">
-          <td>{{ sr.date }}</td>
+          <td>{{ sr.date | date}}</td>
           <td>{{ sr.mentor.name }}</td>
           <td>{{ sr.mentee.name }}</td>
           <td>{{ sr.startTime }}</td>
@@ -140,7 +147,10 @@
             <button class="btn btn-primary btn-sm" (click)="joinMeeting(sr.googleMeetLink)">Join</button>
           </td>
           <td>
-            <button class="btn btn-primary btn-sm" (click)="giveFeedback(sr.id)">Give Feedback</button>
+            <button class="btn btn-primary btn-sm" (click)="giveFeedback(sr.id)">Give</button>
+            </td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="viewFeedback(sr.id)">view</button>
           </td>
         </tr>
       </tbody>

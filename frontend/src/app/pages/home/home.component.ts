@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit {
     id:'',
     name:'',
   }
+  feedBackObj:any;
   availabilitySlots: any;
   selectedSlot: any;
   sessionRequests: any;
@@ -137,7 +138,7 @@ export class HomeComponent implements OnInit {
     });
   }
   joinMeeting(link:any){
-    window.open(`https://meet.google.com/abd-defz-ghi`, '_blank');
+    window.open(`https://meet.google.com/vpo-jkrm-tda`, '_blank');
   }
   giveFeedback(id: any){
     let ratingStr = prompt("Rating (1–5):");
@@ -158,6 +159,25 @@ export class HomeComponent implements OnInit {
           alert("feedback sent")
         })
       }
+  }
+  viewFeedback(id:any){
+    this.apiService.get(`/feedback/${id}`).subscribe((res:any)=>{
+      this.feedBackObj = res.feedback[0];
+      console.log(this.feedBackObj);
+      if(this.role=="mentor"){
+        if(this.feedBackObj.mentorRating){
+          alert(`rating: ${this.feedBackObj.mentorRating}-${this.feedBackObj.mentorComment}`)
+        }else{
+          alert(`feedback not received yet`)
+        }
+      }else{
+        if(this.feedBackObj.menteeRating){
+          alert(`rating: ${this.feedBackObj.menteeRating}-${this.feedBackObj.menteeComment}`)
+        }else{
+          alert(`feedback not received yet`)
+        }
+      }
+    })
   }
 
   
